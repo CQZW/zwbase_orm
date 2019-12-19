@@ -1,0 +1,16 @@
+{
+  "name": "zworm",
+  "version": "1.0.0",
+  "description": "zwbase database orm",
+  "main": "index.js",
+  "scripts": {
+    "test": "node ./test/test.js"
+  },
+  "keywords": [
+    "db",
+    "mongodb",
+    "orm"
+  ],
+  "author": "cqzw",
+  "license": "MIT"
+}
