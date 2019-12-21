@@ -12,5 +12,8 @@
     "orm"
   ],
   "author": "cqzw",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "mongodb": "^3.4.1"
+  }
 }
