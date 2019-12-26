@@ -85,6 +85,9 @@ class test
         let c = await newobj.select( ['mUserId','mUserHeadURL'] ).sortBy('mUserId',false).count();
         console.log('c:',c);
 
+        let delobj = new TestUser( this._db );
+        delobj.mUserId = Q.Query('==',0);
+
     }
    
 }
