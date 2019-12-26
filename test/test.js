@@ -79,13 +79,12 @@ class test
 
         
         let newobj = new TestUser( this._db );
-        newobj.mUserId = Q.Query('!=',0);
-        newobj.mUserName = Q.Query('==','zw');
+        newobj.mUserId = Q.Query('!=','5e0300d0bcbd212f467ac24d').and('!=',0);
         //await newobj.select( ['mUserId','mUserHeadURL'] ).sortBy('mUserId',false).fetchThis();
         //console.log( newobj.mUserId.toHexString() );
         let c = await newobj.select( ['mUserId','mUserHeadURL'] ).sortBy('mUserId',false).count();
         console.log('c:',c);
-        
+
     }
    
 }
