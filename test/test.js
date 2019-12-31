@@ -12,8 +12,8 @@ class TestUser extends zworm
     //定义属性,属性命名规则是 m + 首字母大写,然后驼峰法
     //表字段,将首字母m去除,全部小写
 
-    mUserName = '';
-    mUserId = undefined;
+    mUserId
+    mUserName = ''
     mUserHeadURL = '';
 
     constructor( db )
@@ -22,6 +22,7 @@ class TestUser extends zworm
         //构造之后马上锁定要入库的字段,
         this.lockProps();
     }
+
 
     getPropIdName()
     {
@@ -64,30 +65,49 @@ class test
     
     async testxx()
     { 
-        
+        /*
         let one = new TestUser(this._db);
         one.mUserName = 'zw';
         one.mUserHeadURL = 'http://xx.com/12/head.jpg';
         //await one.insertThis();
         //console.log( one.mUserId.toHexString() );
         
-        one.mUserName = Q.Query('!=','zw').or('==','www');
+        one.mUserName = Q.Or_Query('==','zw').and('==','www');
         one.mUserId = Q.Query('!=','5e0300d0bcbd212f467ac24d' ).and('!=',0);
         
-        //let obj = await one.select( ['mUserId','mUserHeadURL'] ).sortBy('mUserId',true).findOne();
-        //console.log( obj.mUserId.toHexString() );
+        //let obj = await one.select( 'mUserId','mUserHeadURL' ).sortBy('mUserId',true).findOne();
+        let obj = await one.select( 'mUserId','mUserHeadURL' ).sortBy('mUserName','desc','mUserId','desc').findOne();
+        console.log( obj.mUserId.toHexString() );
 
-        
-        let newobj = new TestUser( this._db );
-        newobj.mUserId = Q.Query('!=','5e0300d0bcbd212f467ac24d').and('!=',0);
-        //await newobj.select( ['mUserId','mUserHeadURL'] ).sortBy('mUserId',false).fetchThis();
+        */
+        //let newobj = new TestUser( this._db );
+        //newobj.mUserId = Q.Query('!=','5e0300d0bcbd212f467ac24d').and('!=',0);
+        //await newobj.select( 'mUserId','mUserHeadURL' ).sortBy('mUserId',false).fetchThis();
         //console.log( newobj.mUserId.toHexString() );
-        let c = await newobj.select( ['mUserId','mUserHeadURL'] ).sortBy('mUserId',false).count();
-        console.log('c:',c);
+        //let c = await newobj.select( 'mUserId','mUserHeadURL' ).sortBy('mUserId',false).count();
+        //console.log('c:',c);
 
-        let delobj = new TestUser( this._db );
-        delobj.mUserId = Q.Query('==',0);
+        // let delobj = new TestUser( this._db );
+        // delobj.mUserId = Q.Query('!=',0);
+        // let c = await delobj.deleteAll();
+        // console.log('c:',c);
 
+        let a = new TestUser( this._db );
+        a.mUserId = Q.Query('!=',1);
+        a.mUserName = Q.Or_Query('!=','zw');
+
+        let b = new TestUser( this._db );
+        b.mUserId = Q.Query('!=',2);
+        b.mUserName = Q.Query('!=','zww');
+
+        let c = new TestUser( this._db );
+        c.mUserId = Q.Query('!=',3);
+        c.mUserName = Q.Or_Query('!=','qqqq');
+
+        await a.or( b.and(c) ).fetchThis();
+
+        console.log( 'url:',a.mUserId.toHexString() );
+        
     }
    
 }
