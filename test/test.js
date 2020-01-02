@@ -5,7 +5,7 @@ const   ObjectID    = require('mongodb').ObjectID;
 const zworm = require('../lib/zworm');
 const Q = require('../lib/zwormquery');
 
-
+//收货地址
 class TestAddress extends zworm
 {
     mId;
@@ -38,7 +38,7 @@ class TestAddress extends zworm
     } 
 
 }
-
+//用户订单
 class TestOrder extends zworm
 {
     
@@ -73,7 +73,7 @@ class TestOrder extends zworm
         return fieldname;
     } 
 }
-
+//用户
 class TestUser extends zworm
 {
     //假设定义一个规则:
@@ -189,18 +189,20 @@ class test
         //order.mUserId =  ObjectID.createFromHexString('5e0566f8e67bb654ad76a566');
         //await order.insertThis();
         order.mStatus = Q.Query('==',0);
-        
+        order.sortBy( 'mId' ,false );
+
         let addr = new TestAddress( this._db );
  
         addr.mPhone = Q.Query('!=','15800000');
 
         let testjoin = new TestUser( this._db );
         testjoin.mUserName = Q.Query('==','zw');
+        testjoin.sortBy('mUserId',true);
         //await testjoin.leftJoin( TestOrder,'mUserId','mUserId','mOrders').fetchThis();
         testjoin.leftJoin( order,'mUserId','mUserId','mOrders');
         testjoin.leftJoin( addr,'mUserId','mUserId','mAddress');
         await testjoin.fetchThis();
-        console.log('userid:',testjoin,' orderid:',testjoin.mOrders[0],' address:',testjoin.mAddress[0] );
+        console.log( ' orderid:',testjoin.mUserId );
 
     }
    
