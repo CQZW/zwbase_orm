@@ -6,15 +6,87 @@ const zworm = require('../lib/zworm');
 const Q = require('../lib/zwormquery');
 
 
+class TestAddress extends zworm
+{
+    mId;
+    mUserId;
+    mAddressStr;
+    mPhone;
+    constructor( db )
+    {
+        super(db);
+        this.lockProps();
+    }
+    getPropIdName()
+    {
+        return 'mId';
+    }
+    propMapField( propname )
+    {// mUserName => username
+        if( propname == this.getPropIdName() ) return this.getFieldIdName();
+        return propname.substring(1).toLowerCase();
+    }
+    fieldMapProp( fieldname )
+    {//username => mUserName
+        if( fieldname == this.getFieldIdName( ) ) return this.getPropIdName();
+        let t = this.getLockedProps();
+        for(let one of t )
+        {
+            if( this.propMapField( one ) == fieldname ) return one;
+        }
+        return fieldname;
+    } 
+
+}
+
+class TestOrder extends zworm
+{
+    
+    mId;
+    mUserId;
+    mMoney = 0.0;
+    mTime;
+    mStatus = 0 ;
+    constructor( db )
+    {
+        super(db);
+        this.lockProps();
+
+    }
+    getPropIdName()
+    {
+        return 'mId';
+    }
+    propMapField( propname )
+    {// mUserName => username
+        if( propname == this.getPropIdName() ) return this.getFieldIdName();
+        return propname.substring(1).toLowerCase();
+    }
+    fieldMapProp( fieldname )
+    {//username => mUserName
+        if( fieldname == this.getFieldIdName( ) ) return this.getPropIdName();
+        let t = this.getLockedProps();
+        for(let one of t )
+        {
+            if( this.propMapField( one ) == fieldname ) return one;
+        }
+        return fieldname;
+    } 
+}
+
 class TestUser extends zworm
 {
     //假设定义一个规则:
     //定义属性,属性命名规则是 m + 首字母大写,然后驼峰法
     //表字段,将首字母m去除,全部小写
 
-    mUserId
-    mUserName = ''
-    mUserHeadURL = '';
+    mUserId         // ==> userid
+    mUserName = ''  // ==> username
+    mUserHeadURL = '' // ==> userheadurl
+
+    //连接字段,
+    mOrders;
+    mAddress;
 
     constructor( db )
     {
@@ -22,7 +94,6 @@ class TestUser extends zworm
         //构造之后马上锁定要入库的字段,
         this.lockProps();
     }
-
 
     getPropIdName()
     {
@@ -72,14 +143,12 @@ class test
         //await one.insertThis();
         //console.log( one.mUserId.toHexString() );
         
-        one.mUserName = Q.Or_Query('==','zw').and('==','www');
-        one.mUserId = Q.Query('!=','5e0300d0bcbd212f467ac24d' ).and('!=',0);
-        
+        one.mUserName = Q.Or_Query('|',['a','zw']);        
         //let obj = await one.select( 'mUserId','mUserHeadURL' ).sortBy('mUserId',true).findOne();
         let obj = await one.select( 'mUserId','mUserHeadURL' ).sortBy('mUserName','desc','mUserId','desc').findOne();
         console.log( obj.mUserId.toHexString() );
-
-        */
+*/
+        
         //let newobj = new TestUser( this._db );
         //newobj.mUserId = Q.Query('!=','5e0300d0bcbd212f467ac24d').and('!=',0);
         //await newobj.select( 'mUserId','mUserHeadURL' ).sortBy('mUserId',false).fetchThis();
@@ -91,7 +160,7 @@ class test
         // delobj.mUserId = Q.Query('!=',0);
         // let c = await delobj.deleteAll();
         // console.log('c:',c);
-
+/*
         let a = new TestUser( this._db );
         a.mUserId = Q.Query('!=',1);
         a.mUserName = Q.Or_Query('!=','zw');
@@ -106,8 +175,33 @@ class test
 
         await a.or( b.and(c) ).fetchThis();
 
-        console.log( 'url:',a.mUserId.toHexString() );
+        console.log( 'url:',a.mUserId.toHexString() );*/
+
+        // let address = new  TestAddress( this._db );
+        // address.mUserId = ObjectID.createFromHexString('5e0566f8e67bb654ad76a566');
+        // address.mPhone = '1111';
+        // address.mAddressStr = 'cq here 222';
+
+        // address.insertThis();
+        // return;
+
+        let order = new TestOrder( this._db );
+        //order.mUserId =  ObjectID.createFromHexString('5e0566f8e67bb654ad76a566');
+        //await order.insertThis();
+        order.mStatus = Q.Query('==',0);
         
+        let addr = new TestAddress( this._db );
+ 
+        addr.mPhone = Q.Query('!=','15800000');
+
+        let testjoin = new TestUser( this._db );
+        testjoin.mUserName = Q.Query('==','zw');
+        //await testjoin.leftJoin( TestOrder,'mUserId','mUserId','mOrders').fetchThis();
+        testjoin.leftJoin( order,'mUserId','mUserId','mOrders');
+        testjoin.leftJoin( addr,'mUserId','mUserId','mAddress');
+        await testjoin.fetchThis();
+        console.log('userid:',testjoin,' orderid:',testjoin.mOrders[0],' address:',testjoin.mAddress[0] );
+
     }
    
 }
