@@ -29,7 +29,7 @@ class TestAddress extends zworm
     fieldMapProp( fieldname )
     {//username => mUserName
         if( fieldname == this.getFieldIdName( ) ) return this.getPropIdName();
-        let t = this.getLockedProps();
+        let t = this.getAllWillMapProps();
         for(let one of t )
         {
             if( this.propMapField( one ) == fieldname ) return one;
@@ -65,7 +65,7 @@ class TestOrder extends zworm
     fieldMapProp( fieldname )
     {//username => mUserName
         if( fieldname == this.getFieldIdName( ) ) return this.getPropIdName();
-        let t = this.getLockedProps();
+        let t = this.getAllWillMapProps();
         for(let one of t )
         {
             if( this.propMapField( one ) == fieldname ) return one;
@@ -83,10 +83,6 @@ class TestUser extends zworm
     mUserId         // ==> userid
     mUserName = ''  // ==> username
     mUserHeadURL = '' // ==> userheadurl
-
-    //连接字段,
-    mOrders;
-    mAddress;
 
     constructor( db )
     {
@@ -107,7 +103,7 @@ class TestUser extends zworm
     fieldMapProp( fieldname )
     {//username => mUserName
         if( fieldname == this.getFieldIdName( ) ) return this.getPropIdName();
-        let t = this.getLockedProps();
+        let t = this.getAllWillMapProps();
         for(let one of t )
         {
             if( this.propMapField( one ) == fieldname ) return one;
@@ -184,7 +180,7 @@ class test
 
         // address.insertThis();
         // return;
-
+/*
         let order = new TestOrder( this._db );
         //order.mUserId =  ObjectID.createFromHexString('5e0566f8e67bb654ad76a566');
         //await order.insertThis();
@@ -202,8 +198,28 @@ class test
         testjoin.leftJoin( order,'mUserId','mUserId','mOrders');
         testjoin.leftJoin( addr,'mUserId','mUserId','mAddress');
         await testjoin.fetchThis();
-        console.log( ' orderid:',testjoin.mUserId );
+        console.log( ' orderid:',testjoin.mOrders[0].mId );
 
+
+        let testupdate = new TestUser( this._db );
+        testupdate.mUserName =  'xxxx';
+
+        let q = new TestUser();
+        q.mUserId = Q.Query('??',true);
+        let c = await testupdate.updateManyBy(q);
+        console.log('c:',c);
+        */
+        
+        let testupsert = new TestUser( this._db );
+        testupsert.clearValues();
+        testupsert.mUserName = 'zzzaaab';
+        testupsert.mUserHeadURL = 'http://xxxxxaaaaa';
+
+        let q = new TestUser();
+        q.mUserName = Q.Query('==','zzzaaab');
+        let c = await testupsert.upInsert( q , [ 'mUserName' ] );
+        console.log('c:',c);
+        
     }
    
 }
