@@ -83,7 +83,7 @@ class TestUser extends zworm
     mUserId         // ==> userid
     mUserName = ''  // ==> username
     mUserHeadURL = '' // ==> userheadurl
-
+    mUserAge = 0;
     constructor( db )
     {
         super( db );
@@ -200,24 +200,10 @@ class test
         await testjoin.fetchThis();
         console.log( ' orderid:',testjoin.mOrders[0].mId );
 
-
-        let testupdate = new TestUser( this._db );
-        testupdate.mUserName =  'xxxx';
-
-        let q = new TestUser();
-        q.mUserId = Q.Query('??',true);
-        let c = await testupdate.updateManyBy(q);
-        console.log('c:',c);
-        */
-        
-        let testupsert = new TestUser( this._db );
-        testupsert.clearValues();
-        testupsert.mUserName = 'zzzaaab';
-        testupsert.mUserHeadURL = 'http://xxxxxaaaaa';
-
-        let q = new TestUser();
-        q.mUserName = Q.Query('==','zzzaaab');
-        let c = await testupsert.upInsert( q , [ 'mUserName' ] );
+ */
+        let testup = new TestUser( this._db );
+        testup.mUserName = Q.Query('==','zzzaaa');
+        let c = await testup.updateThis( testup.makeop( 'mUserAge','+',100 ) );
         console.log('c:',c);
         
     }
