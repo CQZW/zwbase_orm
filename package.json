@@ -4,7 +4,8 @@
   "description": "zwbase database orm",
   "main": "index.js",
   "scripts": {
-    "test": "node ./test/test.js"
+    "test": "node ./test/test.js",
+    "mypub": "rm -rf ./logs && npm publish"
   },
   "keywords": [
     "db",
@@ -15,5 +16,9 @@
   "license": "MIT",
   "dependencies": {
     "mongodb": "^3.4.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/CQZW/zwbase_orm.git"
   }
 }
