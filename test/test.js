@@ -180,7 +180,7 @@ class test
 
         // address.insertThis();
         // return;
-/*
+
         let order = new TestOrder( this._db );
         //order.mUserId =  ObjectID.createFromHexString('5e0566f8e67bb654ad76a566');
         //await order.insertThis();
@@ -192,20 +192,20 @@ class test
         addr.mPhone = Q.Query('!=','15800000');
 
         let testjoin = new TestUser( this._db );
-        testjoin.mUserName = Q.Query('==','zw');
+        testjoin.mUserName = Q.Query('==','xxxx');
         testjoin.sortBy('mUserId',true);
         //await testjoin.leftJoin( TestOrder,'mUserId','mUserId','mOrders').fetchThis();
-        testjoin.leftJoin( order,'mUserId','mUserId','mOrders');
-        testjoin.leftJoin( addr,'mUserId','mUserId','mAddress');
+        testjoin.leftJoin( order,'mUserId','mUserId','mOrders',true);
+        testjoin.leftJoin( addr,'mUserId','mUserId','mAddress',true);
         await testjoin.fetchThis();
-        console.log( ' orderid:',testjoin.mOrders[0].mId );
+        console.log( ' orderid:',testjoin );
 
- */
+/*
         let testup = new TestUser( this._db );
         testup.mUserName = Q.Query('==','zzzaaa');
         let c = await testup.updateThis( testup.makeop( 'mUserAge','+',100 ) );
         console.log('c:',c);
-        
+ */
     }
    
 }
