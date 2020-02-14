@@ -136,8 +136,8 @@ class test
         let one = new TestUser(this._db);
         one.mUserName = 'zw';
         one.mUserHeadURL = 'http://xx.com/12/head.jpg';
-        //await one.insertThis();
-        //console.log( one.mUserId.toHexString() );
+        await one.insertThis();
+        console.log( one.mUserId.toHexString() );
         
         one.mUserName = Q.Or_Query('|',['a','zw']);        
         //let obj = await one.select( 'mUserId','mUserHeadURL' ).sortBy('mUserId',true).findOne();
