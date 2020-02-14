@@ -200,6 +200,16 @@ class test
         await testjoin.fetchThis();
         console.log( ' orderid:',testjoin );
 
+        let tmpid = new ObjectID("5e46687c82ac3263981d165d");
+        let testdump = new TestUser( this._db );
+        testdump.mUserAge = 1;
+        testdump.mUserId = tmpid;
+        testdump.mUserName = 'zazaaa';
+        await testdump.dumpThisById();
+
+        console.log( TestUser.createId( true )  );
+
+
 /*
         let testup = new TestUser( this._db );
         testup.mUserName = Q.Query('==','zzzaaa');

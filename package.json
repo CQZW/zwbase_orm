@@ -1,6 +1,6 @@
 {
   "name": "zworm",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "zwbase database orm",
   "main": "index.js",
   "scripts": {
