@@ -5,8 +5,17 @@ const   ObjectID    = require('mongodb').ObjectID;
 const zworm = require('../lib/zworm');
 const Q = require('../lib/zwormquery');
 
+class TestBase extends zworm
+{
+    mBaseid ='';
+    constructor(db)
+    {
+        super(db);
+        this.lockProps();
+    }
+}
 //收货地址
-class TestAddress extends zworm
+class TestAddress extends TestBase
 {
     mId;
     mUserId;
@@ -39,7 +48,7 @@ class TestAddress extends zworm
 
 }
 //用户订单
-class TestOrder extends zworm
+class TestOrder extends TestBase
 {
     
     mId;
@@ -74,16 +83,20 @@ class TestOrder extends zworm
     } 
 }
 //用户
-class TestUser extends zworm
+class TestUser extends TestBase
 {
     //假设定义一个规则:
     //定义属性,属性命名规则是 m + 首字母大写,然后驼峰法
     //表字段,将首字母m去除,全部小写
 
+    mIncId;//自增ID
     mUserId         // ==> userid
     mUserName = ''  // ==> username
     mUserHeadURL = '' // ==> userheadurl
     mUserAge = 0;
+    mOpenId;
+    mType;
+    mToken;
     constructor( db )
     {
         super( db );
@@ -109,6 +122,17 @@ class TestUser extends zworm
             if( this.propMapField( one ) == fieldname ) return one;
         }
         return fieldname;
+    }
+    getAutoIncProp()
+    {
+        return 'mIncId';
+    }
+    indexInfo()
+    {
+        let a = super.indexInfo();
+        let openid_index = this.tempIndex( 'openid_index', [ 'mOpenId' ] ,true );
+        a.push(openid_index);
+        return a;
     }
 
 }
@@ -180,6 +204,8 @@ class test
 
         // address.insertThis();
         // return;
+        let torder = new TestAddress( this._db );
+        await torder.find();
 
         let order = new TestOrder( this._db );
         //order.mUserId =  ObjectID.createFromHexString('5e0566f8e67bb654ad76a566');
@@ -200,17 +226,29 @@ class test
         await testjoin.fetchThis();
         console.log( ' orderid:',testjoin );
 
+        let forindex= new TestUser( this._db );
+        await forindex.installIndex();
+
+
         let tmpid = new ObjectID("5e46687c82ac3263981d165d");
         let testdump = new TestUser( this._db );
+        //testdump.mUserId = tmpid;
+        testdump.mIncId = 1;
         testdump.mUserAge = 1;
-        testdump.mUserId = tmpid;
         testdump.mUserName = 'zazaaa';
-        await testdump.dumpThisById();
+        await testdump.dumpThisById( );
+        console.log( JSON.stringify (testdump.copyObj() ) );
 
-        console.log( TestUser.createId( true )  );
+        // let tquery = new TestUser( this._db );
+        // tquery.mUserName = Q.Query('==','zzzbbba');
+        
+        // let testupsert = new TestUser( this._db );
+        // testupsert.mUserHeadURL = 'http:xxxaaaccc';
+        // testupsert.mUserName = 'zzzbbba';
+        // await testupsert.upInsert( tquery,[ 'mUserHeadURL' ] );
 
 
-/*
+ /*
         let testup = new TestUser( this._db );
         testup.mUserName = Q.Query('==','zzzaaa');
         let c = await testup.updateThis( testup.makeop( 'mUserAge','+',100 ) );
