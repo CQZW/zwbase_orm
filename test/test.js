@@ -222,9 +222,9 @@ class test
         testjoin.sortBy('mUserId',true);
         //await testjoin.leftJoin( TestOrder,'mUserId','mUserId','mOrders').fetchThis();
         testjoin.leftJoin( order,'mUserId','mUserId','mOrders',true);
-        testjoin.leftJoin( addr,'mUserId','mUserId','mAddress',true);
+        testjoin.leftJoin( addr,'mUserId','mUserId','mAddresses',true);
         await testjoin.fetchThis();
-        console.log( ' orderid:',testjoin );
+        console.log( ' orderid:', JSON.stringify( testjoin ) );
 
         let forindex= new TestUser( this._db );
         await forindex.installIndex();
