@@ -97,6 +97,7 @@ class TestUser extends TestBase
     mOpenId;
     mType;
     mToken;
+    mTestDate;
     constructor( db )
     {
         super( db );
@@ -132,6 +133,9 @@ class TestUser extends TestBase
         let a = super.indexInfo();
         let openid_index = this.tempIndex( 'openid_index', [ 'mOpenId' ] ,true );
         a.push(openid_index);
+        let ttl_index = this.tempIndex('ttl_index',['mTestDate'],false);
+        ttl_index.opt.expireAfterSeconds = 0;
+        a.push( ttl_index );
         return a;
     }
 
@@ -224,21 +228,28 @@ class test
         testjoin.leftJoin( order,'mUserId','mUserId','mOrders',true);
         testjoin.leftJoin( addr,'mUserId','mUserId','mAddresses',true);
         await testjoin.fetchThis();
-        console.log( ' orderid:', JSON.stringify( testjoin ) );
+        //console.log( ' orderid:', JSON.stringify( testjoin ) );
 
         let forindex= new TestUser( this._db );
         await forindex.installIndex();
+ 
 
+        // let tmpid = new ObjectID("5e46687c82ac3263981d165d");
+        // let testdump = new TestUser( this._db );
+        // //testdump.mUserId = tmpid;
+        // testdump.mIncId = 1;
+        // testdump.mUserAge = 1;
+        // testdump.mUserName = 'zazaaa';
+        // testdump.mTestDate = new Date( new Date().getTime() + 1000*60 );
+        // await testdump.dumpThisById( );
+        // //console.log( JSON.stringify (testdump.copyObj() ) );
 
-        let tmpid = new ObjectID("5e46687c82ac3263981d165d");
-        let testdump = new TestUser( this._db );
-        //testdump.mUserId = tmpid;
-        testdump.mIncId = 1;
-        testdump.mUserAge = 1;
-        testdump.mUserName = 'zazaaa';
-        await testdump.dumpThisById( );
-        console.log( JSON.stringify (testdump.copyObj() ) );
-
+        let testatom = new TestUser( this._db );
+        testatom.mUserName = Q.Query('==','newname2');
+        let forup = new TestUser( this._db );
+        forup.mUserName = 'newname3';
+        forup.mUserAge = 111;
+        await testatom.updateAtom( forup );
         // let tquery = new TestUser( this._db );
         // tquery.mUserName = Q.Query('==','zzzbbba');
         
