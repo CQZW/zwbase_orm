@@ -228,7 +228,7 @@ class test
         testjoin.leftJoin( order,'mUserId','mUserId','mOrders',true);
         testjoin.leftJoin( addr,'mUserId','mUserId','mAddresses',true);
         await testjoin.fetchThis();
-        //console.log( ' orderid:', JSON.stringify( testjoin ) );
+        console.log( ' orderid:', JSON.stringify( testjoin ) );
 
         let forindex= new TestUser( this._db );
         await forindex.installIndex();

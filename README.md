@@ -47,7 +47,7 @@
     //查询语句类型
     const Q = require('../lib/zwormquery');
 
-    //插入数据
+    //插入数据,如果属性 是undefined 不会插入,否则会插入
     let user = new TestUser( db  );
     user.mUserName = 'zw';
     await user.insertThis();
@@ -56,16 +56,23 @@
     let user = new TestUser( db  );
     user.mUserId = '5e0dbd720f9818a0ca0c0748';
     user.mUserName = 'zw';
-    await user.dumpThisById();
+    //先尝试更新 userId == 5e0dbd720f9818a0ca0c0748的数据的 userName 字段,否则插入新数据
+    await user.dumpThisById( ['mUserName'] );//如果更新,只更新 userName 字段
+
     
     //更新数据,根据mUserId 更新 mUserName
     let user = new TestUser( db  );
     user.mUserId = Q.Query('==','5e0dbd720f9818a0ca0c0748' );
     user.mUserName = 'zzzwww';
+    //更新 userId == 5e0dbd720f9818a0ca0c0748的数据
     await user.updateThis();
     //或者原生更新语句
     await user.updateThis( {'$set':{'userName':'zzzwww'}} );
     //类似的还有 updateAtom 原子更新,updateMany 多条更新
+    //或者更新另外一个对象
+    let forupdate = new TestUser();
+    forupdate.mUserName = 'zwzzz';
+    user.updateThis( forupdate );//更新条件就是 user的查询值,更新值就是 forupdate的属性值
 
     //查询数据
     let user = new TestUser( db  );
