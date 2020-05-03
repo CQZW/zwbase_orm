@@ -208,8 +208,12 @@ class test
 
         // address.insertThis();
         // return;
-        let torder = new TestAddress( this._db );
-        await torder.find();
+        /**
+         * @type TestUser
+         */
+        let tuser = new TestUser( this._db );
+        await tuser.fetchThis();
+        console.log( tuser.cutObj( ['mUserAge'] ,2) );
 
         let order = new TestOrder( this._db );
         //order.mUserId =  ObjectID.createFromHexString('5e0566f8e67bb654ad76a566');
@@ -242,7 +246,7 @@ class test
         // testdump.mUserName = 'zazaaa';
         // testdump.mTestDate = new Date( new Date().getTime() + 1000*60 );
         // await testdump.dumpThisById( );
-        // //console.log( JSON.stringify (testdump.copyObj() ) );
+        // //console.log( JSON.stringify (testdump.cutObj() ) );
 
         let testatom = new TestUser( this._db );
         testatom.mUserName = Q.Query('==','newname2');
