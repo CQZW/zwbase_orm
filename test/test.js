@@ -212,6 +212,8 @@ class test
          * @type TestUser
          */
         let tuser = new TestUser( this._db );
+        tuser.clearValues();
+        tuser.mUserId = Q.Query('==','5e46b3f7f531b2737b48a940' );
         await tuser.fetchThis();
         console.log( tuser.cutObj( ['mUserAge'] ,2) );
 
@@ -226,6 +228,7 @@ class test
         addr.mPhone = Q.Query('!=','15800000');
 
         let testjoin = new TestUser( this._db );
+        testjoin.mOrders = {};//for test
         testjoin.mUserName = Q.Query('==','xxxx');
         testjoin.sortBy('mUserId',true);
         //await testjoin.leftJoin( TestOrder,'mUserId','mUserId','mOrders').fetchThis();
