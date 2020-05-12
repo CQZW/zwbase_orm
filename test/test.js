@@ -13,7 +13,12 @@ class TestBase extends zworm
         super(db);
         this.lockProps();
     }
+    getSearchClsStartAt( clsname )
+    {
+        return module
+    }
 }
+
 //收货地址
 class TestAddress extends TestBase
 {
@@ -208,6 +213,8 @@ class test
 
         // address.insertThis();
         // return;
+
+
         /**
          * @type TestUser
          */
@@ -232,12 +239,16 @@ class test
         testjoin.mUserName = Q.Query('==','xxxx');
         testjoin.sortBy('mUserId',true);
         //await testjoin.leftJoin( TestOrder,'mUserId','mUserId','mOrders').fetchThis();
-        testjoin.leftJoin( order,'mUserId','mUserId','mOrders',true);
-        testjoin.leftJoin( addr,'mUserId','mUserId','mAddresses',true);
+        testjoin.leftJoin( order,'mUserId','mUserId','mOrders',false);
+        testjoin.leftJoin( addr,'mUserId','mUserId','mAddresses',false);
         await testjoin.fetchThis();
         console.log( ' orderid:', JSON.stringify( testjoin ) );
 
-        let forindex= new TestUser( this._db );
+        let forudmp = testjoin.enCodeForDump();
+        let fordecode_user = new TestUser( this._db );
+        forudmp = JSON.stringify( forudmp );
+        fordecode_user.decodeFromDump( JSON.parse( forudmp ) );
+        let forindex = new TestUser( this._db );
         await forindex.installIndex();
  
 
@@ -277,3 +288,8 @@ class test
 }
  
 let vv = new test();
+let expmodel = {};
+expmodel.TestAddress = TestAddress;
+expmodel.TestOrder = TestOrder;
+expmodel.TestUser = TestUser;
+module.exports = expmodel;
