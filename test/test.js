@@ -239,8 +239,8 @@ class test
         testjoin.mUserName = Q.Query('==','xxxx');
         testjoin.sortBy('mUserId',true);
         //await testjoin.leftJoin( TestOrder,'mUserId','mUserId','mOrders').fetchThis();
-        testjoin.leftJoin( order,'mUserId','mUserId','mOrders',false);
-        testjoin.leftJoin( addr,'mUserId','mUserId','mAddresses',false);
+        testjoin.leftJoin( order,'mUserId','mUserId','mOrders',true);
+        testjoin.leftJoin( addr,'mUserId','mUserId','mAddresses',true);
         await testjoin.fetchThis();
         console.log( ' orderid:', JSON.stringify( testjoin ) );
 
