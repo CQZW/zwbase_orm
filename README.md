@@ -62,8 +62,8 @@
     
     //更新数据,根据mUserId 更新 mUserName
     let user = new TestUser( db  );
-    user.mUserId = Q.Query('==','5e0dbd720f9818a0ca0c0748' );
-    user.mUserName = 'zzzwww';
+    user.mUserId = Q.Query('==','5e0dbd720f9818a0ca0c0748' );//查询条件
+    user.mUserName = 'zzzwww';//更是数据
     //更新 userId == 5e0dbd720f9818a0ca0c0748的数据
     await user.updateThis();
     //或者原生更新语句
