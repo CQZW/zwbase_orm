@@ -341,6 +341,7 @@ class test
         testjion.mTest = {};
         testjion.mTest.a = new TestOrder();
         testjion.mTest.a.mMoney = 20;
+        testjion.getLockedProps(true);
         retv = testjion.enCodeForDump();
         retv = JSON.stringify( retv );
         testjion = new TestUser( );
